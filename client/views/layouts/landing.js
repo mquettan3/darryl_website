@@ -21,21 +21,6 @@ Template.landingLayout.rendered = function(){
         }
     }();
     //End Preloader logic
-
-    $('body').scrollspy({
-        target: '#header',
-        offset: 80
-    })
-
-    // Page scrolling feature
-    $('a.page-scroll').bind('click', function (event) {
-        var link = $(this);
-        $('html, body').stop().animate({
-            scrollTop: $(link.attr('href')).offset().top - 65
-        }, 500);
-        event.preventDefault();
-    });
-
 }
 
 Template.landingLayout.destroyed = function(){
