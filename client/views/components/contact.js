@@ -3,7 +3,7 @@ Template.contact.events({
   // Form Submission
   // ----------------------------------------------------------------
   'submit #contact-footer-form': function (event) {
-      var default_subject = 'MQWebsite Email From: ';
+      var default_subject = 'S.U. Website Contact Form Email From: ';
       var subject = default_subject.concat(event.target.name.value);
 
       if(event.target.email.value.indexOf("yahoo") > -1) {
@@ -15,7 +15,8 @@ Template.contact.events({
 
       //In your client code: asynchronously send an email
       Meteor.call('sendEmail',
-        'mquettan@gmail.com', //to
+        // 'mquettan@gmail.com', //to
+        'Djsu87@gmail.com', //to
         event.target.email.value, //from
         subject,//subject
         event.target.message.value,
