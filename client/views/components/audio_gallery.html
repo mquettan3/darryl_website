@@ -6,8 +6,11 @@
     <section id="audio_gallery" class="audio_gallery">
         <div class="container">
             <h1>Beats by S.U.:</h1>
-            <audio controls preload>
-                <source src="{{audioSource}}" type="audio/mpeg" />
+            <button type="button" id="button_play" class="btn"><i class="fa fa-play"></i></button>
+            <button type="button" id="button_next" class="btn"><i class="fa fa-fast-forward"></i></button>
+            <p>Now Playing: {{current_song_name}}</p>
+            <audio id="audio_player" preload>
+                <source src="{{audio_source}}" type="audio/mpeg" />
             </audio>
             <!-- <audio controls preload>
                 <source src="audio/Have To(s.u.)67.2bpm.mp3" type="audio/mpeg" />
@@ -33,9 +36,9 @@
             </div> -->
 
             <!-- Playlist Selections -->
-            <ul id="playlist">
-                <li><a href="audio/Yuppppp(s.u.)69bpm.mp3"><h2>Yuppppp <i>69bpm</i></h2></a></li>
-                <li><a href="audio/Have To(s.u.)67.2bpm.mp3"><h2>Have To <i>67.2bpm</i></h2></a></li>
+            <ul id="list" class="playlist">
+                <li><a href="audio/Yuppppp(s.u.)69bpm.mp3" data-index="0" value="Yuppppp"><h2>Yuppppp <i>69bpm</i></h2></a></li>
+                <li><a href="audio/Have To(s.u.)67.2bpm.mp3" data-index="1" value="Have To"><h2>Have To <i>67.2bpm</i></h2></a></li>
             </ul>
         </div>
     </section>

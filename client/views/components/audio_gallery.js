@@ -1,4 +1,38 @@
-var audio_location;
+var state = "stop";
+var playlist_entries, audio;
+var current_song_id = 0;
+
+function buttonStopPress(){
+    state = 'stop';
+    var button = d3.select("#button_play").classed('btn-success', false);
+    button.select("i").attr('class', "fa fa-play");
+}
+
+function playAudio(){
+    state='play';
+    $("#button_play").addClass('btn-success');
+    $("#button_play i").removeClass("fa fa-play");
+    $("#button_play i").addClass("fa fa-pause");
+    audio.load();
+    audio.play();
+}
+
+function pauseAudio() {
+    state='pause';
+    $("#button_play").addClass('btn-success');
+    $("#button_play i").removeClass("fa fa-pause");
+    $("#button_play i").addClass("fa fa-play");
+    audio.pause();
+}
+
+function stopAudio() {
+    state='stop';
+    $("#button_play").removeClass('btn-success');
+    $("#button_play i").removeClass("fa fa-pause");
+    $("#button_play i").addClass("fa fa-play");
+    audio.pause();
+    audio.currentTime = 0;
+}
 
 Template.audio_gallery.onCreated(function(){
     // Soundcloud Widget
@@ -21,7 +55,13 @@ Template.audio_gallery.onCreated(function(){
     // );
 
     this.audio_location = new ReactiveVar("audio/Yuppppp(s.u.)69bpm.mp3");
+    this.current_song_name = new ReactiveVar("N/A");
 
+});
+
+Template.audio_gallery.onRendered(function(){
+    playlist_entries = document.getElementById('list').getElementsByTagName("a");
+    audio = document.getElementById('audio_player');
 });
 
 Template.audio_gallery.destroyed = function(){
@@ -29,20 +69,52 @@ Template.audio_gallery.destroyed = function(){
 };
 
 Template.audio_gallery.helpers({
-    audioSource: function(){
+    audio_source: function(){
         return Template.instance().audio_location.get();
-        // return audio_location;
+    },
+    current_song_name: function(){
+        return Template.instance().current_song_name.get();
     }
 })
 
 Template.audio_gallery.events({
-    "click a": function(event, template) {
+    "click ul li a": function(event, template) {
+        //Prevent the Default Behavior
         event.preventDefault();
-        console.log("Button clicked!");
+
+        //Set the current_song_id
+        current_song_id = $(event.currentTarget).data("index");
+
+        //Set the appropriate reactive variables then flush to produce to the helper functions
         template.audio_location.set($(event.currentTarget).attr("href"));
-        // audio_location = $(event.currentTarget).attr("href");
+        template.current_song_name.set($(event.currentTarget).attr("value"));
         Tracker.flush();
-        template.find("audio").load();
-        template.find("audio").play();
+
+        //Play the selected song
+        playAudio();
+    },
+    "click #button_play": function(event, template) {
+        if(state=='stop'){
+          state='play';
+          playAudio();
+        }
+        else if(state=='play' || state=='resume'){
+          state = 'pause';
+          pauseAudio();
+        }
+        else if(state=='pause'){
+          state = 'resume';
+          playAudio();
+        }
+    },
+    "click #button_next": function(event, template) {
+        current_song_id++;
+        if(current_song_id > (playlist_entries.length - 1)) {
+            current_song_id = 0;
+        }
+        template.audio_location.set(playlist_entries[current_song_id].getAttribute("href"));
+        template.current_song_name.set(playlist_entries[current_song_id].getAttribute("value"));
+        Tracker.flush();
+        playAudio();
     }
 });
